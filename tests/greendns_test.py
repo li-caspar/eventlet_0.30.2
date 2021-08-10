@@ -655,6 +655,13 @@ class TestGetaddrinfo(tests.LimitedTestCase):
         addr = [('1.2.3.4', 0)] * len(result)
         assert addr == [ai[-1] for ai in result]
 
+    def test_getaddrinfo_bytes(self):
+        greendns.resolve = _make_mock_resolve()
+        greendns.resolve.add('example.com', '1.2.3.4')
+        res = greendns.getaddrinfo(b'example.com', b'0')
+        addr = [('1.2.3.4', 0)] * len(res)
+        assert addr == [ai[-1] for ai in res]
+
     def test_getaddrinfo_hosts_only_timeout(self):
         hostsres = _make_mock_base_resolver()
         hostsres.raises = greendns.dns.resolver.NoAnswer
